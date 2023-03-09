@@ -106,6 +106,14 @@ AVPacket* XDemux::Read()
 	return pkt;
 }
 
+bool XDemux::IsAudio(AVPacket* pkt)
+{
+	if (!pkt) return false;
+	if (pkt->stream_index == videoStream)
+		return false;
+	return true;
+}
+
 AVCodecParameters* XDemux::CopyVPara()
 {
 	mux.lock();

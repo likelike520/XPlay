@@ -12,6 +12,8 @@ public:
 	virtual bool Open(const char* url);
 	virtual AVPacket* Read();
 
+	virtual bool IsAudio(AVPacket* pkt);
+
 	virtual AVCodecParameters* CopyVPara();
 	
 	virtual AVCodecParameters* CopyAPara();
