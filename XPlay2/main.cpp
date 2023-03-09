@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 #include "XDemux.h"
+#include "XDecode.h"
 bool XDemux::isFirst = true;
 int main(int argc, char *argv[])
 {
@@ -22,6 +23,16 @@ int main(int argc, char *argv[])
     cout << "demux.CopyAPara = " << demux.CopyAPara() << endl;
     cout << "demux.Seek(0.95) = " << demux.Seek(0.95) << endl;
 
+
+    XDecode vdecode;
+    cout << "vdecode.Open(demux.CopyVPara() = " << vdecode.Open(demux.CopyVPara()) << endl;
+    vdecode.Clear();
+    vdecode.Close();
+    XDecode adecode;
+    cout << "adecode.Open(demux.CopyAPara() = " << vdecode.Open(demux.CopyAPara()) << endl;
+
+
+    cout << "=============================================" << endl;
     while (1)
     {
         AVPacket* pkt = demux.Read();

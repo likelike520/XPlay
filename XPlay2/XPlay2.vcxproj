@@ -96,11 +96,13 @@
     <QtRcc Include="XPlay2.qrc" />
     <QtUic Include="XPlay2.ui" />
     <QtMoc Include="XPlay2.h" />
+    <ClCompile Include="XDecode.cpp" />
     <ClCompile Include="XDemux.cpp" />
     <ClCompile Include="XPlay2.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="XDecode.h" />
     <ClInclude Include="XDemux.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
