@@ -63,9 +63,14 @@ bool XDemux::Open(const char* url)
 	cout << "video fps = " << r2d(as->avg_frame_rate) << endl;
 
 	
+	
 	//获取音频流
 	audioStream = av_find_best_stream(ic, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
 	as = ic->streams[audioStream];
+	this->sampleRate = as->codecpar->sample_rate;
+	this->channels = as->codecpar->channels;
+
+
 	cout << "=======================================================" << endl;
 	cout << audioStream << "音频信息" << endl;
 	cout << "codec_id = " << as->codecpar->codec_id << endl;

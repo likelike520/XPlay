@@ -4,8 +4,9 @@
 using namespace std;
 #include "XDemux.h"
 #include "XDecode.h"
+#include "XResample.h"
 #include<QThread>
-
+#include"XAudioPlay.h"
 
 
 class TestThread :public QThread
@@ -27,7 +28,7 @@ public:
         cout << "demux.open = " << demux.Open(url) << endl;
         cout << "demux.CopyVPara = " << demux.CopyVPara() << endl;
         cout << "demux.CopyAPara = " << demux.CopyAPara() << endl;
-        cout << "demux.Seek(0.95) = " << demux.Seek(0.95) << endl;
+        //cout << "demux.Seek(0.95) = " << demux.Seek(0.95) << endl;
 
 
        
@@ -36,12 +37,20 @@ public:
           vdecode.Close();*/
      
         cout << "adecode.Open(demux.CopyAPara() = " << adecode.Open(demux.CopyAPara()) << endl;
+        cout << "resample.Open() = " << resample.Open(demux.CopyAPara()) << endl;
+
+        XAudioPlay::Get()->channels = demux.channels;
+        XAudioPlay::Get()->sampleRate = demux.sampleRate;
+
+        cout << "XAudioPlay::Get()->Open() = " << XAudioPlay::Get()->Open()<< endl;
 
 
         cout << "=============================================" << endl;
 
 
     }
+
+    unsigned char* pcm = new unsigned char[1024 * 1024];
 
     void run()
     {
@@ -52,17 +61,28 @@ public:
 
             if (demux.IsAudio(pkt))
             {
-             /*   adecode.Send(pkt);
-                AVFrame* frame = adecode.Recv();*/
-              
+                adecode.Send(pkt);
+                AVFrame* frame = adecode.Recv();
+               //cout<<"resample:"<< resample.Resample(frame, pcm)<<endl;
+                int len = resample.Resample(frame, pcm);
+                cout << "resample:" << len << " ";
                 //cout << "Audio:" << frame << endl;
+                while (len > 0)
+                {
+                    if (XAudioPlay::Get()->GetFree() >= len)
+                    {
+                        XAudioPlay::Get()->Write(pcm, len);
+                        break;
+                    }
+                    msleep(1);
+               }
             }
             else
             {
                 vdecode.Send(pkt);
                 AVFrame* frame = vdecode.Recv();
                 video->Repaint(frame);
-                msleep(40);
+               // msleep(40);
                 //   cout << "Video:" << frame << endl;
             }
 
@@ -76,6 +96,8 @@ public:
     XDecode vdecode;
     XDecode adecode;
     XVideoWidget* video;
+    XResample resample;
+
 
 };
 

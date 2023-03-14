@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.12.11_msvc2017_64</QtInstall>
-    <QtModules>core;opengl;gui;widgets;openglextensions</QtModules>
+    <QtModules>core;gui;multimedia;opengl;openglextensions;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>5.12.11_msvc2017</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;multimedia;opengl;openglextensions;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -93,6 +93,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="XAudioPlay.cpp" />
+    <ClCompile Include="XResample.cpp" />
     <ClCompile Include="XVideoWidget.cpp" />
     <QtRcc Include="XPlay2.qrc" />
     <QtUic Include="XPlay2.ui" />
@@ -103,8 +105,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="XAudioPlay.h" />
     <ClInclude Include="XDecode.h" />
     <ClInclude Include="XDemux.h" />
+    <ClInclude Include="XResample.h" />
     <QtMoc Include="XVideoWidget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
