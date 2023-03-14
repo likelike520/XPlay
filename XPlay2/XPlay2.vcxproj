@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\affmpeg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\affmpeg\include;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\affmpeg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -93,6 +93,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="XVideoWidget.cpp" />
     <QtRcc Include="XPlay2.qrc" />
     <QtUic Include="XPlay2.ui" />
     <QtMoc Include="XPlay2.h" />
@@ -104,6 +105,7 @@
   <ItemGroup>
     <ClInclude Include="XDecode.h" />
     <ClInclude Include="XDemux.h" />
+    <QtMoc Include="XVideoWidget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

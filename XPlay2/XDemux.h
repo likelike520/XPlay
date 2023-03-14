@@ -27,6 +27,8 @@ public:
 	virtual ~XDemux();
 
 	int totalMs = 0;
+	int width = 0;
+	int height = 0;
 protected:
 	AVFormatContext* ic = NULL;
 	int videoStream = -1;

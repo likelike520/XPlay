@@ -48,6 +48,7 @@ bool XDecode::Send(AVPacket* pkt)
 	if (!codec)
 	{
 		mux.unlock();
+		av_packet_free(&pkt);
 		return false;
 	}
 	int re = avcodec_send_packet(codec, pkt);
