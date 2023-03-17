@@ -5,7 +5,6 @@ extern "C"
 }
 #include<iostream>
 using namespace std;
-
 bool XDecode::Open(AVCodecParameters* para)
 {
 	if (!para) return false;

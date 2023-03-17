@@ -7,11 +7,15 @@ using namespace std;
 #include "XResample.h"
 #include<QThread>
 #include"XAudioPlay.h"
+#include"XAudioThread.h"
+#include"XVideoThread.h"
 
 
 class TestThread :public QThread
 {
 public:
+    XAudioThread at;
+    XVideoThread vt;
     void Init()
     {
 
@@ -32,18 +36,21 @@ public:
 
 
        
-        cout << "vdecode.Open(demux.CopyVPara() = " << vdecode.Open(demux.CopyVPara()) << endl;
+       // cout << "vdecode.Open(demux.CopyVPara() = " << vdecode.Open(demux.CopyVPara()) << endl;
         /*  vdecode.Clear();
           vdecode.Close();*/
      
-        cout << "adecode.Open(demux.CopyAPara() = " << adecode.Open(demux.CopyAPara()) << endl;
+        /*cout << "adecode.Open(demux.CopyAPara() = " << adecode.Open(demux.CopyAPara()) << endl;
         cout << "resample.Open() = " << resample.Open(demux.CopyAPara()) << endl;
 
         XAudioPlay::Get()->channels = demux.channels;
         XAudioPlay::Get()->sampleRate = demux.sampleRate;
 
-        cout << "XAudioPlay::Get()->Open() = " << XAudioPlay::Get()->Open()<< endl;
-
+        cout << "XAudioPlay::Get()->Open() = " << XAudioPlay::Get()->Open()<< endl;*/
+        cout << "av.Open = " << vt.Open(demux.CopyVPara(), video, demux.width, demux.height);
+        cout << "at.Open = " << at.Open(demux.CopyAPara(), demux.sampleRate, demux.channels);
+        at.start();
+        vt.start();
 
         cout << "=============================================" << endl;
 
@@ -61,7 +68,7 @@ public:
 
             if (demux.IsAudio(pkt))
             {
-                adecode.Send(pkt);
+              /*adecode.Send(pkt);
                 AVFrame* frame = adecode.Recv();
                //cout<<"resample:"<< resample.Resample(frame, pcm)<<endl;
                 int len = resample.Resample(frame, pcm);
@@ -75,15 +82,17 @@ public:
                         break;
                     }
                     msleep(1);
-               }
+               }*/  
+                at.Push(pkt);
             }
             else
             {
-                vdecode.Send(pkt);
+               /* vdecode.Send(pkt);
                 AVFrame* frame = vdecode.Recv();
-                video->Repaint(frame);
+                video->Repaint(frame);*/
                // msleep(40);
                 //   cout << "Video:" << frame << endl;
+                vt.Push(pkt);
             }
 
 
@@ -93,10 +102,10 @@ public:
 
     }
     XDemux demux;
-    XDecode vdecode;
-    XDecode adecode;
-    XVideoWidget* video;
-    XResample resample;
+    XVideoWidget* video = 0;
+    //XDecode vdecode;
+   /* XDecode adecode;
+    XResample resample;*/
 
 
 };
@@ -109,11 +118,11 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     TestThread tt;
-    tt.Init();
     XPlay2 w;
     w.show();
-    w.ui.video->Init(tt.demux.width, tt.demux.height);
+    //w.ui.video->Init(tt.demux.width, tt.demux.height);
     tt.video = w.ui.video;
+    tt.Init();
     tt.start();
 
     return a.exec();

@@ -9,7 +9,7 @@ extern "C"
 
 #pragma comment(lib,"swresample.lib")
 #pragma comment(lib,"avcodec.lib")
-bool XResample::Open(AVCodecParameters* para)
+bool XResample::Open(AVCodecParameters* para, bool isClearPara)
 {
     if (!para) return false;
     mux.lock();
@@ -24,6 +24,9 @@ bool XResample::Open(AVCodecParameters* para)
         para->sample_rate,
         0, 0
     );
+
+    if (isClearPara)
+        avcodec_parameters_free(&para);
 
     int re = swr_init(actx);
     mux.unlock();

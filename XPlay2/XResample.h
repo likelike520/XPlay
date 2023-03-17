@@ -9,7 +9,7 @@ class XResample
 {
 public:
 	//输出参数和输入参数一致除采样格式,输出为S16
-	virtual bool Open(AVCodecParameters *para);
+	virtual bool Open(AVCodecParameters *para ,bool isClearPara = false);
 	virtual void Close();
 
 	virtual int Resample(AVFrame* indata, unsigned char* data);
