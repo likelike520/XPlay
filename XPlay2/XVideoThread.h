@@ -19,6 +19,8 @@ public:
 	bool isExit = false;
 	~XVideoThread();
 
+	long long synpts = 0;
+
 protected:
 	std::list<AVPacket*> packs;
 	std::mutex mux;

@@ -9,6 +9,33 @@ public:
 	QIODevice* io = NULL;
 	std::mutex mux;
 
+	virtual long long GetNoPlayMs()
+	{
+		mux.lock();
+		if (!output)
+		{
+			mux.unlock();
+			return 0;
+		}
+
+		long long pts = 0;
+
+		double size = output->bufferSize() - output->bytesFree();
+
+		double secSize = sampleRate * (sampleSize / 8) * channels;
+		if (secSize <= 0)
+		{
+			pts = 0;
+		}
+		else
+		{
+			pts = (size / secSize ) * 1000;
+		}
+
+		mux.unlock();
+		return pts;
+	}
+
 
 	virtual void Close()
 	{
@@ -25,6 +52,7 @@ public:
 			delete output;
 			output = 0;
 		}
+		
 
 		mux.unlock();
 	}

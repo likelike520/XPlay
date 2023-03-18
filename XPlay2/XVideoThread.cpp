@@ -7,6 +7,7 @@ bool XVideoThread::Open(AVCodecParameters* para, IVideoCall* call,int width, int
 {
 	if (!para) return false;
 	mux.lock();
+	synpts = 0;
 	if (call)
 	{
 		this->call = call;
@@ -49,6 +50,14 @@ void XVideoThread::run()
 		mux.lock();
 
 		if (packs.empty() || !decode)
+		{
+			mux.unlock();
+			msleep(1);
+			continue;
+		}
+
+
+		if (synpts < decode->pts)
 		{
 			mux.unlock();
 			msleep(1);

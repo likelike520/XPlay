@@ -9,9 +9,14 @@ public:
 
 	virtual bool Open() = 0;
 	virtual void Close() = 0;
+	
+	virtual long long  GetNoPlayMs() = 0;
 
 	virtual bool Write(const unsigned char* data, int datasize) = 0;
 	virtual int GetFree() = 0;
+
+
+
 
 	static XAudioPlay* Get();
 

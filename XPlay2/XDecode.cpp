@@ -74,14 +74,16 @@ AVFrame* XDecode::Recv()
 		return NULL;
 	}
 
-	cout << "[" << frame->linesize[0] << "]" << flush;
+	//cout << "[" << frame->linesize[0] << "]" << flush;
+	pts = frame->pts;
+
 	return frame;
 }
 
  void XDecode::Close()
  {
 	 mux.lock();
-
+	 pts = 0;
 	 if (codec) {
 		 avcodec_close(codec);
 		 avcodec_free_context(&codec);

@@ -11,6 +11,8 @@ class XDecode
 public:
 	bool isAudio = false;
 
+	long long pts = 0;
+
 	virtual bool Open(AVCodecParameters *para);
 
 	virtual bool Send(AVPacket* pkt);

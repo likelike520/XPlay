@@ -12,6 +12,8 @@ class XAudioPlay;
 class XAudioThread:public QThread
 {
 public:
+	long long pts = 0;
+
 	virtual bool Open(AVCodecParameters* para, int sampleRate, int channels);
 	virtual void Push(AVPacket* pkt);
 	void run();
