@@ -111,3 +111,9 @@ XDecode::~XDecode()
 {
 
 }
+
+void XFreePacket(AVPacket** pkt)
+{
+	if (!pkt || !(*pkt)) return;
+	av_packet_free(pkt);
+}

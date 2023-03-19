@@ -5,6 +5,9 @@ struct AVCodecContext;
 struct AVFrame;
 struct AVPacket;
 #include<mutex>
+
+extern void XFreePacket(AVPacket** pkt);
+
 class XDecode
 {
 

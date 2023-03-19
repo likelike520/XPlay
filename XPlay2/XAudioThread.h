@@ -8,24 +8,24 @@ class XDecode;
 class XResample;
 class XAudioPlay;
 
+#include "XDecodeThread.h"
 
-class XAudioThread:public QThread
+class XAudioThread:public XDecodeThread
 {
 public:
 	long long pts = 0;
 
 	virtual bool Open(AVCodecParameters* para, int sampleRate, int channels);
-	virtual void Push(AVPacket* pkt);
 	void run();
 
 	int maxList = 100;
 	bool isEixt = false;
-	~XAudioThread();
+	XAudioThread();
+	virtual ~XAudioThread();
+
 protected:
 
-	std::list<AVPacket*> packs;
-	std::mutex mux;
-	XDecode *decode = 0;
+	std::mutex amux;
 	XResample *res = 0;
 	XAudioPlay* ap = 0;
 };

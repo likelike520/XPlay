@@ -1,30 +1,24 @@
 #pragma once
-#include <QThread>
-#include<list>
-#include<mutex>
-struct AVCodecParameters;
-struct AVPacket;
-class XDecode;
+
 
 #include "IVideoCall.h"
+#include "XDecodeThread.h"
 
-class XVideoThread:public QThread
+class XVideoThread:public XDecodeThread
 {
 public:
 	virtual bool Open(AVCodecParameters* para, IVideoCall* call,int width, int height);
-	virtual void Push(AVPacket* pkt);
 	void run();
 
-	int maxList = 100;
-	bool isExit = false;
-	~XVideoThread();
+	XVideoThread();
+
+	virtual ~XVideoThread();
 
 	long long synpts = 0;
 
 protected:
-	std::list<AVPacket*> packs;
-	std::mutex mux;
-	XDecode* decode = 0;
+	
+	std::mutex vmux;
 	IVideoCall* call = 0;
 };
 

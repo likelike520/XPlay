@@ -6,67 +6,65 @@ using namespace std;
 bool XVideoThread::Open(AVCodecParameters* para, IVideoCall* call,int width, int height)
 {
 	if (!para) return false;
-	mux.lock();
+
+	Clear();
+
+	vmux.lock();
 	synpts = 0;
 	if (call)
 	{
 		this->call = call;
 		call->Init(width, height);
 	}
+	vmux.unlock();
 	bool re = true;
-	decode = new XDecode();
+
 	if (!decode->Open(para))
 	{
 		cout << "video decode->Open failed!" << endl;
 		re = false;
 	}
-	mux.unlock();
+	
 	cout << "XVideoThread::Open:" << re << endl;
 	return re;
 }
 
-void XVideoThread::Push(AVPacket* pkt)
-{
-	if (!pkt)return;
-	//阻塞
-	while (!isExit)
-	{
-		mux.lock();
-		if (packs.size() < maxList)
-		{
-			packs.push_back(pkt);
-			mux.unlock();
-			break;
-		}
-		mux.unlock();
-		msleep(1);
-	}
-}
+
 
 void XVideoThread::run()
 {
 	while (!isExit)
 	{
-		mux.lock();
+		vmux.lock();
 
-		if (packs.empty() || !decode)
+		/*if (packs.empty() || !decode)
 		{
-			mux.unlock();
+			vmux.unlock();
+			msleep(1);
+			continue;
+		}*/
+
+
+		if (synpts > 0 &&synpts < decode->pts)
+		{
+			vmux.unlock();
 			msleep(1);
 			continue;
 		}
 
-
-		if (synpts < decode->pts)
-		{
-			mux.unlock();
-			msleep(1);
-			continue;
-		}
-
-		AVPacket* pkt = packs.front();
+	/*	AVPacket* pkt = packs.front();
 		packs.pop_front();
-		decode->Send(pkt);
+		decode->Send(pkt);*/
+
+		AVPacket* pkt = Pop();
+		int re = decode->Send(pkt);
+		if (!re)
+		{
+			vmux.unlock();
+			msleep(1);
+			continue;
+		}
+
 
 		while (!isExit)
 		{
@@ -78,14 +76,17 @@ void XVideoThread::run()
 			}
 
 		}
-		mux.unlock();
+		vmux.unlock();
 
 	}
 	
 }
 
+XVideoThread::XVideoThread()
+{
+}
+
 XVideoThread::~XVideoThread()
 {
-	isExit = true;
-	wait();
+	
 }
