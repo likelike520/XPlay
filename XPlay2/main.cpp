@@ -122,9 +122,14 @@ int main(int argc, char *argv[])
 
     XPlay2 w;
     w.show();
-    XDemuxThread dt;
-    dt.Open("v1080.mp4", w.ui.video);
-    dt.Start();
+    /*XDemuxThread dt;
+    char* url = 0;
+    url = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4";*/
+    //url = "http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8";
+     //url = "rtmp://ns8.indexforce.com/home/mystream";
+    //url = "v1080.mp4";
+   /* dt.Open(url, w.ui.video);
+    dt.Start();*/
 
     /*TestThread tt;
     w.ui.video->Init(tt.demux.width, tt.demux.height);

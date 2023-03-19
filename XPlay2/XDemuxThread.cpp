@@ -40,6 +40,11 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
  void XDemuxThread::Start()
  {
 	 mux.lock();
+
+	 if (!demux) demux = new XDemux();
+	 if (!at) at = new XAudioThread();
+	 if (!vt) vt = new XVideoThread();
+
 	 QThread::start();
 	 if (at) at->start();
 	 if (vt) vt->start();
@@ -86,7 +91,7 @@ void XDemuxThread::run()
 		}
 
 		mux.unlock();
-
+		msleep(1);
 	}
 	
 }

@@ -18,8 +18,10 @@ static double r2d(AVRational r)
 
 bool XDemux::Open(const char* url)
 {
+	Close();
 	AVDictionary* opts = NULL;
 
+	//设置rtsp流已tcp协议打开
 	av_dict_set(&opts, "rtsp_transport", "tcp", 0);
 	av_dict_set(&opts, "max_delay", "500", 0);
 	
