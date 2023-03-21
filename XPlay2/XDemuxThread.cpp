@@ -53,7 +53,26 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 
  }
 
-void XDemuxThread::run()
+ void XDemuxThread::Close()
+ {
+	 isExit = true;
+	 wait();
+
+	 if (at) at->Close();
+	 if (vt) vt->Close();
+	 if (demux) demux->Close();
+	 mux.lock();
+	 delete vt;
+	 delete at;
+	 delete demux;
+	 vt = NULL;
+	 at = NULL;
+	 demux = NULL;
+	 mux.unlock();
+
+ }
+
+ void XDemuxThread::run()
 {
 	while (!isExit)
 	{

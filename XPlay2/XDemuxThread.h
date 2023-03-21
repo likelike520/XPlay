@@ -12,6 +12,10 @@ public:
 
     virtual void Start();
 
+
+    //关闭线程清理资源
+    virtual void Close();
+
     void run();
     virtual ~XDemuxThread(); 
     XDemuxThread();

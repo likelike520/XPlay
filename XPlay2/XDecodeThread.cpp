@@ -66,3 +66,18 @@ void XDecodeThread::Clear()
 	mux.unlock();
 
 }
+
+void XDecodeThread::Close()
+{
+	Clear();
+
+	isExit = true;
+	wait();
+	decode->Close();
+
+	mux.lock();
+	delete decode;
+	decode = NULL;
+	mux.unlock();
+
+}

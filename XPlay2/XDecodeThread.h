@@ -13,10 +13,13 @@ public:
 
     virtual void Push(AVPacket* pkt);
 
-    virtual AVPacket* Pop();
   
 
     virtual void Clear();
+
+    virtual void Close();
+
+    virtual AVPacket* Pop();
 
     int maxList = 100;
     bool isExit = false;

@@ -44,7 +44,7 @@ bool XDemux::Open(const char* url)
 
 	re = avformat_find_stream_info(ic, 0);
 
-	int totalMs = ic->duration / (AV_TIME_BASE) / 1000;
+	totalMs = ic->duration / (AV_TIME_BASE) / 1000;
 	cout << "总时长" << totalMs << endl;
 
 
@@ -111,7 +111,7 @@ AVPacket* XDemux::Read()
 	pkt->pts = pkt->pts * (1000 * (r2d(ic->streams[pkt->stream_index]->time_base)));
 	pkt->dts = pkt->dts * (1000 * (r2d(ic->streams[pkt->stream_index]->time_base)));
 	mux.unlock();
-	cout << pkt->pts << " " << flush ;
+	//cout << pkt->pts << " " << flush ;
 	return pkt;
 }
 

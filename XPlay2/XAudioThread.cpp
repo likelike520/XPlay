@@ -39,6 +39,33 @@ bool XAudioThread::Open(AVCodecParameters* para, int sampleRate, int channels)
 	return re;
 }
 
+void XAudioThread::Close()
+{
+	XDecodeThread::Close();
+	if (res) 
+	{
+		res->Close();
+		amux.lock();
+		delete res;
+		res = NULL;	
+		amux.unlock();
+	}
+	if (ap) 
+	{
+		ap->Close();
+		amux.lock();
+		delete ap;
+		ap = NULL;
+		amux.unlock();
+	}
+
+	mux.lock();
+
+	mux.unlock();
+
+
+}
+
 
 
 void XAudioThread::run()
@@ -49,14 +76,15 @@ void XAudioThread::run()
 	{
 		amux.lock();
 
-		if (packs.empty() || !decode || !res || !ap)
+		/*if (packs.empty() || !decode || !res || !ap)
 		{
 			amux.unlock();
 			msleep(1);
 			continue;
 		}
 		AVPacket* pkt = packs.front();
-		packs.pop_front();
+		packs.pop_front();*/
+		AVPacket* pkt = Pop();
 		bool re = decode->Send(pkt);
 		if (!re)
 		{
@@ -73,7 +101,7 @@ void XAudioThread::run()
 
 			//减去缓冲中没播放的时间
 			pts = decode->pts - ap->GetNoPlayMs();
-			cout << "auido syn :" << pts<<endl;
+			//cout << "auido syn :" << pts<<endl;
 
 			int size = res->Resample(frame, pcm);
 

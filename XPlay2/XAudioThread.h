@@ -1,10 +1,5 @@
 #pragma once
-#include <QThread>
-#include<list>
-#include<mutex>
-struct AVCodecParameters;
-struct AVPacket;
-class XDecode;
+
 class XResample;
 class XAudioPlay;
 
@@ -16,6 +11,9 @@ public:
 	long long pts = 0;
 
 	virtual bool Open(AVCodecParameters* para, int sampleRate, int channels);
+
+	virtual void Close();
+
 	void run();
 
 	int maxList = 100;
