@@ -72,6 +72,14 @@ void XAudioThread::Close()
 
 
 
+void XAudioThread::Clear()
+{
+	XDecodeThread::Clear();
+	mux.lock();
+	if (ap) ap->Clear();
+	mux.unlock();
+}
+
 void XAudioThread::run()
 {
 	unsigned char* pcm = new unsigned char[1024 * 1024 * 10];
@@ -105,7 +113,7 @@ void XAudioThread::run()
 
 			//减去缓冲中没播放的时间
 			pts = decode->pts - ap->GetNoPlayMs();
-			cout << "auido syn :" << pts<<endl;
+			//cout << "auido syn :" << pts<<endl;
 
 			int size = res->Resample(frame, pcm);
 
@@ -116,7 +124,6 @@ void XAudioThread::run()
 				if (int free = ap->GetFree() < size || isPause)
 				{
 					msleep(1);
-					cout << "free" << ap->GetFree() << "  ";
 					continue;
 					
 				}

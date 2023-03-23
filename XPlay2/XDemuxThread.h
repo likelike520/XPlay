@@ -12,7 +12,7 @@ public:
 
     virtual void Start();
 
-
+    virtual void Clear();
     //关闭线程清理资源
     virtual void Close();
 
@@ -25,6 +25,8 @@ public:
 
     void SetPause(bool isPause);
     bool isPause = false;
+
+    virtual void Seek(double pos);
 
 protected:
     XAudioThread* at = 0;

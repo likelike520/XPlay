@@ -14,6 +14,7 @@ public:
 
 	virtual void Close();
 
+	virtual void Clear();
 	void run();
 
 	int maxList = 100;

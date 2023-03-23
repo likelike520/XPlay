@@ -45,6 +45,7 @@ XPlay2::~XPlay2()
 
 void XPlay2::timerEvent(QTimerEvent* s)
 {
+    if (isSliderPress) return;
     long long total = dt.totalMs;
     if (total > 0)
     {
@@ -103,3 +104,28 @@ void XPlay2::PlayOrPause()
     SetPause(isPause);
     dt.SetPause(isPause);
 }
+
+
+
+
+
+void XPlay2::SliderPress()
+{
+    isSliderPress = true;
+    
+
+}
+
+
+
+
+void XPlay2::SliderRelease()
+{
+    isSliderPress = false;
+
+    double pos = 0.0;
+    pos = (double)ui.playPos->value() / (double)ui.playPos->maximum();
+    dt.Seek(pos);
+}
+
+

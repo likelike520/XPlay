@@ -56,6 +56,16 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 
  }
 
+ void XDemuxThread::Clear()
+ {
+	 mux.lock();
+	 if (demux) demux->Clear();
+	 if (at) at->Clear();
+	 if (vt) vt->Clear();
+
+	 mux.unlock();
+ }
+
  void XDemuxThread::Close()
  {
 	 isExit = true;
@@ -142,6 +152,15 @@ void XDemuxThread::SetPause(bool isPause)
 	mux.unlock();
 
 
+}
+
+void XDemuxThread::Seek(double pos)
+{
+	Clear();
+	mux.lock();
+
+	if (demux) demux->Seek(pos);
+	mux.unlock();
 }
 
 XDemuxThread::~XDemuxThread()

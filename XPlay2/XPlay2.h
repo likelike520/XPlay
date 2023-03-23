@@ -26,7 +26,10 @@ public:
 public slots:
     void OpenFile();
     void PlayOrPause();
+    void SliderPress();
+    void SliderRelease();
 
 private:
+    bool isSliderPress = false;
     Ui::XPlay2Class ui;
 };

@@ -57,6 +57,19 @@ public:
 		mux.unlock();
 	}
 
+	virtual void Clear()
+	{
+		mux.lock();
+
+		if (io)
+		{
+			io->reset();
+		}
+
+		mux.unlock();
+	
+	}
+
 
 	virtual bool Open()
 	{
