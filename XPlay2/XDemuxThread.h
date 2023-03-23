@@ -20,6 +20,8 @@ public:
     virtual ~XDemuxThread(); 
     XDemuxThread();
     bool isExit = false;
+    long long totalMs = 0;
+    long long pts = 0;
 
 protected:
     XAudioThread* at = 0;

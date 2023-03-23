@@ -39,7 +39,7 @@
     <string>打开文件</string>
    </property>
   </widget>
-  <widget class="QSlider" name="horizontalSlider">
+  <widget class="QSlider" name="playPos">
    <property name="geometry">
     <rect>
      <x>30</x>

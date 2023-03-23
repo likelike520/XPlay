@@ -18,6 +18,7 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 		cout << "demux->Open(url) failed!" << endl;
 		re = false;
 	}
+	this->totalMs = demux->totalMs;
 	if (!at->Open(demux->CopyAPara(), demux->sampleRate, demux->channels))
 	{
 		cout << "at->Open failed!" << endl;
@@ -86,6 +87,7 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 
 		if (at && vt)
 		{
+			pts = at->pts;
 			vt->synpts = at->pts;
 		}
 

@@ -10,6 +10,8 @@ XPlay2::XPlay2(QWidget *parent)
 {
     ui.setupUi(this);
     dt.Start();
+
+    startTimer(40);
 }
 
 
@@ -35,4 +37,47 @@ void XPlay2::OpenFile()
 XPlay2::~XPlay2()
 {
     dt.Close();
+}
+
+
+
+void XPlay2::timerEvent(QTimerEvent* s)
+{
+    long long total = dt.totalMs;
+    if (total > 0)
+    {
+        double pos = (double)dt.pts / (double)total;
+
+        int v = ui.playPos->maximum() * pos;
+        ui.playPos->setValue(ui.playPos->maximum());
+
+    }
+
+}
+
+
+
+
+
+void XPlay2::resizeEvent(QResizeEvent* s)
+{
+    ui.playPos->move(50, this->height() - 100);
+    ui.playPos->resize(this->width() - 100, ui.playPos->height());
+    ui.openFile->move(100, this->height() - 150);
+    ui.video->resize(this->size());
+
+}
+
+void XPlay2::mouseDoubleClickEvent(QMouseEvent* s)
+{
+    if (isFullScreen())
+    {
+        this->showNormal();
+    }
+    else
+    {
+        this->showFullScreen();
+    }
+
+
 }
