@@ -16,6 +16,11 @@ public:
 
 	long long synpts = 0;
 
+	void SetPause(bool isPause);
+	bool isPause = false;
+
+
+
 protected:
 	
 	std::mutex vmux;

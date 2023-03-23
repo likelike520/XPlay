@@ -8,6 +8,13 @@ using namespace std;
 bool XAudioThread::Open(AVCodecParameters* para, int sampleRate, int channels)
 {
 	if (!para) return false;
+
+	Clear();
+
+	///////////
+	isPause = false;
+
+
 	amux.lock();
 	pts = 0;
 
@@ -101,7 +108,7 @@ void XAudioThread::run()
 
 			//减去缓冲中没播放的时间
 			pts = decode->pts - ap->GetNoPlayMs();
-			//cout << "auido syn :" << pts<<endl;
+			cout << "auido syn :" << pts<<endl;
 
 			int size = res->Resample(frame, pcm);
 
@@ -109,10 +116,11 @@ void XAudioThread::run()
 			{
 				if (size <= 0) break;
 
-				if (ap->GetFree() < size)
+				if (ap->GetFree() < size || isPause)
 				{
 					msleep(1);
 					continue;
+					
 				}
 
 				ap->Write(pcm, size);
@@ -131,6 +139,17 @@ void XAudioThread::run()
 	delete pcm;
 
 }
+
+
+
+void XAudioThread::SetPause(bool isPause)
+{
+	this->isPause = isPause;
+	if (ap)
+		ap->SetPause(isPause);
+}
+
+
 
 XAudioThread::XAudioThread()
 {

@@ -23,6 +23,9 @@ public:
     long long totalMs = 0;
     long long pts = 0;
 
+    void SetPause(bool isPause);
+    bool isPause = false;
+
 protected:
     XAudioThread* at = 0;
     XVideoThread* vt = 0;

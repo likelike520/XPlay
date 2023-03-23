@@ -20,9 +20,12 @@ public:
 
     //双击全屏
     void mouseDoubleClickEvent(QMouseEvent* s);
+    void SetPause(bool isPause);
+
 
 public slots:
     void OpenFile();
+    void PlayOrPause();
 
 private:
     Ui::XPlay2Class ui;

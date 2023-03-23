@@ -25,13 +25,14 @@ void XPlay2::OpenFile()
         return;
     }
 
+    SetPause(false);
     this->setWindowTitle(name);
     if (!dt.Open(name.toLocal8Bit(), ui.video))
     {
         QMessageBox::information(0, "error", "open file failed!");
         return;
     }
-
+   
 }
 
 XPlay2::~XPlay2()
@@ -49,7 +50,7 @@ void XPlay2::timerEvent(QTimerEvent* s)
         double pos = (double)dt.pts / (double)total;
 
         int v = ui.playPos->maximum() * pos;
-        ui.playPos->setValue(ui.playPos->maximum());
+        ui.playPos->setValue(v);
 
     }
 
@@ -64,6 +65,7 @@ void XPlay2::resizeEvent(QResizeEvent* s)
     ui.playPos->move(50, this->height() - 100);
     ui.playPos->resize(this->width() - 100, ui.playPos->height());
     ui.openFile->move(100, this->height() - 150);
+    ui.isPlay->move(ui.openFile->x() + ui.openFile->width() + 10, ui.openFile->y());
     ui.video->resize(this->size());
 
 }
@@ -80,4 +82,23 @@ void XPlay2::mouseDoubleClickEvent(QMouseEvent* s)
     }
 
 
+}
+
+void XPlay2::SetPause(bool isPause)
+{
+    if (isPause)
+    {
+        ui.isPlay->setText("播 放");
+    }
+    else
+    {
+        ui.isPlay->setText("暂 停");
+    }
+}
+
+void XPlay2::PlayOrPause()
+{
+    bool isPause = !dt.isPause;
+    SetPause(isPause);
+    dt.SetPause(isPause);
 }

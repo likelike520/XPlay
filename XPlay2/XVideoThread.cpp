@@ -9,6 +9,8 @@ bool XVideoThread::Open(AVCodecParameters* para, IVideoCall* call,int width, int
 
 	Clear();
 
+	isPause = false;
+
 	vmux.lock();
 	synpts = 0;
 	if (call)
@@ -36,6 +38,12 @@ void XVideoThread::run()
 	while (!isExit)
 	{
 		vmux.lock();
+		if (this->isPause)
+		{
+			vmux.unlock();
+			msleep(5);
+			continue;
+		}
 
 		/*if (packs.empty() || !decode)
 		{
@@ -89,4 +97,11 @@ XVideoThread::XVideoThread()
 XVideoThread::~XVideoThread()
 {
 	
+}
+
+void XVideoThread::SetPause(bool isPause)
+{
+	vmux.lock();
+	this->isPause = isPause;
+	vmux.unlock();
 }

@@ -18,6 +18,10 @@ public:
 
 	int maxList = 100;
 	bool isEixt = false;
+
+	void SetPause(bool isPause);
+	bool isPause = false;
+
 	XAudioThread();
 	virtual ~XAudioThread();
 

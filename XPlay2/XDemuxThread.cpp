@@ -8,6 +8,9 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 	if (!url || url[0] == '\0') return false;
 
 	mux.lock();
+
+	isPause = false;
+
 	if (!demux) demux = new XDemux();
 	if (!at) at = new XAudioThread();
 	if (!vt) vt = new XVideoThread();
@@ -78,6 +81,15 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 	while (!isExit)
 	{
 		mux.lock();
+
+		if (isPause)
+		{
+			mux.unlock();
+			msleep(5);
+			continue;
+		}
+
+
 		if (!demux)
 		{
 			mux.unlock();
@@ -119,6 +131,17 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 
 XDemuxThread::XDemuxThread()
 {
+
+}
+
+void XDemuxThread::SetPause(bool isPause)
+{
+	mux.lock();
+	this->isPause = isPause;
+	if (at) at->SetPause(isPause);
+	if (vt) vt->SetPause(isPause);
+	mux.unlock();
+
 
 }
 
