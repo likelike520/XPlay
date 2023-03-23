@@ -9,7 +9,6 @@ bool XVideoThread::Open(AVCodecParameters* para, IVideoCall* call,int width, int
 
 	Clear();
 
-	isPause = false;
 
 	vmux.lock();
 	synpts = 0;

@@ -26,6 +26,7 @@ void XPlay2::OpenFile()
     }
 
     SetPause(false);
+    dt.SetPause(false);
     this->setWindowTitle(name);
     if (!dt.Open(name.toLocal8Bit(), ui.video))
     {

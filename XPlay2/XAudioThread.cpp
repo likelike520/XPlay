@@ -11,10 +11,7 @@ bool XAudioThread::Open(AVCodecParameters* para, int sampleRate, int channels)
 
 	Clear();
 
-	///////////
-	isPause = false;
-
-
+	
 	amux.lock();
 	pts = 0;
 
@@ -116,9 +113,10 @@ void XAudioThread::run()
 			{
 				if (size <= 0) break;
 
-				if (ap->GetFree() < size || isPause)
+				if (int free = ap->GetFree() < size || isPause)
 				{
 					msleep(1);
+					cout << "free" << ap->GetFree() << "  ";
 					continue;
 					
 				}

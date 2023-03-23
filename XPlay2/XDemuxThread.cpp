@@ -9,7 +9,6 @@ bool XDemuxThread::Open(const char* url, IVideoCall* call)
 
 	mux.lock();
 
-	isPause = false;
 
 	if (!demux) demux = new XDemux();
 	if (!at) at = new XAudioThread();
