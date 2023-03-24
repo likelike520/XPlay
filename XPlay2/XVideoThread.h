@@ -7,8 +7,12 @@
 class XVideoThread:public XDecodeThread
 {
 public:
+
+	virtual bool RepaintPts(AVPacket* pkt, long long seekpts);
+
 	virtual bool Open(AVCodecParameters* para, IVideoCall* call,int width, int height);
 	void run();
+
 
 	XVideoThread();
 

@@ -3,6 +3,35 @@
 #include <iostream>
 using namespace std;
 
+bool XVideoThread::RepaintPts(AVPacket* pkt, long long seekpts)
+{
+	vmux.lock();
+	bool re = decode->Send(pkt);
+	if (!re)
+	{
+		vmux.unlock();
+		return true;
+	}
+	AVFrame* frame = decode->Recv();
+	if (!frame)
+	{
+		vmux.unlock();
+		return false;
+	}
+	if (decode->pts >= seekpts)
+	{
+		if (call)
+			call->Repaint(frame);
+		//XFreeFrame(&frame);
+		vmux.unlock();
+		return true;
+	}
+
+	XFreeFrame(&frame);
+	vmux.unlock();
+	return false;
+}
+
 bool XVideoThread::Open(AVCodecParameters* para, IVideoCall* call,int width, int height)
 {
 	if (!para) return false;

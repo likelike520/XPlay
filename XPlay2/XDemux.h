@@ -11,6 +11,7 @@ class XDemux
 public:
 	virtual bool Open(const char* url);
 	virtual AVPacket* Read();
+	virtual AVPacket* ReadVideo();
 
 	virtual bool IsAudio(AVPacket* pkt);
 

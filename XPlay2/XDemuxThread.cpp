@@ -157,10 +157,42 @@ void XDemuxThread::SetPause(bool isPause)
 void XDemuxThread::Seek(double pos)
 {
 	Clear();
+
+
+	mux.lock();
+	bool status = this->isPause;
+	mux.unlock();
+
+	SetPause(true);
+	
+
 	mux.lock();
 
-	if (demux) demux->Seek(pos);
+	if (demux) 
+		demux->Seek(pos);
+
+	long long seekPts = pos * demux->totalMs;
+
+	
+	while (!isExit)
+	{
+		AVPacket* pkt = demux->ReadVideo();
+		if (!pkt) break;
+		if (vt->RepaintPts(pkt, seekPts))
+		{
+			this->pts = seekPts;
+			break;
+		}
+
+
+	}
+
+
 	mux.unlock();
+	
+	SetPause(status);
+
+
 }
 
 XDemuxThread::~XDemuxThread()
