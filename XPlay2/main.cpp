@@ -20,7 +20,7 @@ public:
     void Init()
     {
 
-        char* url = "v1080.mp4";
+        const char* url = "v1080.mp4";
     
 
         cout << "demux.open = " << demux.Open(url) << endl;
